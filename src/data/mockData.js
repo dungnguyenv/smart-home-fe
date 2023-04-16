@@ -266,54 +266,54 @@ export const mockDataInvoices = [
   },
 ];
 
-export const mockTransactions = [
+export const mockHistories = [
   {
     txId: "01e4dsa",
     user: "johndoe",
     date: "2021-09-01",
-    cost: "43.95",
+    action: "Open Door",
   },
   {
     txId: "0315dsaa",
     user: "jackdower",
     date: "2022-04-01",
-    cost: "133.45",
+    action: "Open Door",
   },
   {
     txId: "01e4dsa",
     user: "aberdohnny",
     date: "2021-09-01",
-    cost: "43.95",
+    action: "Open Door",
   },
   {
     txId: "51034szv",
     user: "goodmanave",
     date: "2022-11-05",
-    cost: "200.95",
+    action: "Open Door",
   },
   {
     txId: "0a123sb",
     user: "stevebower",
     date: "2022-11-02",
-    cost: "13.55",
+    action: "Open Door",
   },
   {
     txId: "01e4dsa",
     user: "aberdohnny",
     date: "2021-09-01",
-    cost: "43.95",
+    action: "Open Door",
   },
   {
     txId: "120s51a",
     user: "wootzifer",
     date: "2019-04-15",
-    cost: "24.20",
+    action: "Open Door",
   },
   {
     txId: "0315dsaa",
     user: "jackdower",
     date: "2022-04-01",
-    cost: "133.45",
+    action: "Open Door",
   },
 ];
 
@@ -432,163 +432,163 @@ export const mockPieData = [
 
 export const mockLineData = [
   {
-    id: "japan",
+    id: "indoor",
     color: tokens("dark").greenAccent[500],
     data: [
       {
-        x: "plane",
+        x: "01/01",
         y: 101,
       },
       {
-        x: "helicopter",
+        x: "01/02",
         y: 75,
       },
       {
-        x: "boat",
+        x: "01/03",
         y: 36,
       },
       {
-        x: "train",
+        x: "01/04",
         y: 216,
       },
       {
-        x: "subway",
+        x: "01/05",
         y: 35,
       },
       {
-        x: "bus",
+        x: "01/06",
         y: 236,
       },
       {
-        x: "car",
+        x: "01/07",
         y: 88,
       },
       {
-        x: "moto",
+        x: "01/08",
         y: 232,
       },
       {
-        x: "bicycle",
+        x: "01/09",
         y: 281,
       },
       {
-        x: "horse",
+        x: "01/10",
         y: 1,
       },
       {
-        x: "skateboard",
+        x: "01/11",
         y: 35,
       },
       {
-        x: "others",
+        x: "01/12",
         y: 14,
       },
     ],
   },
   {
-    id: "france",
+    id: "outdoor",
     color: tokens("dark").blueAccent[300],
     data: [
       {
-        x: "plane",
+        x: "01/01",
         y: 212,
       },
       {
-        x: "helicopter",
+        x: "01/02",
         y: 190,
       },
       {
-        x: "boat",
+        x: "01/03",
         y: 270,
       },
       {
-        x: "train",
+        x: "01/04",
         y: 9,
       },
       {
-        x: "subway",
+        x: "01/05",
         y: 75,
       },
       {
-        x: "bus",
+        x: "01/06",
         y: 175,
       },
       {
-        x: "car",
+        x: "01/07",
         y: 33,
       },
       {
-        x: "moto",
+        x: "01/08",
         y: 189,
       },
       {
-        x: "bicycle",
+        x: "01/09",
         y: 97,
       },
       {
-        x: "horse",
+        x: "01/10",
         y: 87,
       },
       {
-        x: "skateboard",
+        x: "01/11",
         y: 299,
       },
       {
-        x: "others",
+        x: "01/12",
         y: 251,
       },
     ],
   },
   {
-    id: "us",
+    id: "vietnam",
     color: tokens("dark").redAccent[200],
     data: [
       {
-        x: "plane",
+        x: "01/01",
         y: 191,
       },
       {
-        x: "helicopter",
+        x: "01/02",
         y: 136,
       },
       {
-        x: "boat",
+        x: "01/03",
         y: 91,
       },
       {
-        x: "train",
+        x: "01/04",
         y: 190,
       },
       {
-        x: "subway",
+        x: "01/05",
         y: 211,
       },
       {
-        x: "bus",
+        x: "01/06",
         y: 152,
       },
       {
-        x: "car",
+        x: "01/07",
         y: 189,
       },
       {
-        x: "moto",
+        x: "01/08",
         y: 152,
       },
       {
-        x: "bicycle",
+        x: "01/09",
         y: 8,
       },
       {
-        x: "horse",
+        x: "01/10",
         y: 197,
       },
       {
-        x: "skateboard",
+        x: "01/11",
         y: 107,
       },
       {
-        x: "others",
+        x: "01/12",
         y: 170,
       },
     ],
