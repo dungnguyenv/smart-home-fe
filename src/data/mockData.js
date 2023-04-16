@@ -299,6 +299,36 @@ export const mockHistories = [
   },
   {
     txId: "01e4dsa",
+    user: "johndoe",
+    date: "2021-09-01",
+    action: "Open Door",
+  },
+  {
+    txId: "0315dsaa",
+    user: "jackdower",
+    date: "2022-04-01",
+    action: "Open Door",
+  },
+  {
+    txId: "01e4dsa",
+    user: "aberdohnny",
+    date: "2021-09-01",
+    action: "Open Door",
+  },
+  {
+    txId: "51034szv",
+    user: "goodmanave",
+    date: "2022-11-05",
+    action: "Open Door",
+  },
+  {
+    txId: "0a123sb",
+    user: "stevebower",
+    date: "2022-11-02",
+    action: "Open Door",
+  },
+  {
+    txId: "01e4dsa",
     user: "aberdohnny",
     date: "2021-09-01",
     action: "Open Door",
