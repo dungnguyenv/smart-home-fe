@@ -16,6 +16,10 @@ import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutl
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import YardRoundedIcon from '@mui/icons-material/YardRounded';
+import KitchenRoundedIcon from '@mui/icons-material/KitchenRounded';
+import BedRoundedIcon from '@mui/icons-material/BedRounded';
+import BathtubRoundedIcon from '@mui/icons-material/BathtubRounded';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -121,6 +125,38 @@ const Sidebar = () => {
               title="Living Room"
               to="/"
               icon={<HomeOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="Bed Room"
+              to="/bedroom"
+              icon={<BedRoundedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="Kitchen"
+              to="/kitchen"
+              icon={<KitchenRoundedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="Bath Room"
+              to="/bathroom"
+              icon={<BathtubRoundedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="Garden"
+              to="/garden"
+              icon={<YardRoundedIcon />}
               selected={selected}
               setSelected={setSelected}
             />

@@ -32,7 +32,7 @@ const Dashboard = () => {
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Header title="LIVING ROOM" subtitle="Welcome to your Smart Home" />
 
-          <Box>
+          <Box >
             <Button
               sx={{
                 backgroundColor: colors.blueAccent[700],
@@ -320,7 +320,7 @@ const Dashboard = () => {
               <BarChart isDashboard={true} />
             </Box>
           </Box>
-          <Box
+          {/* <Box
             gridColumn="span 4"
             gridRow="span 2"
             backgroundColor={colors.primary[400]}
@@ -336,7 +336,7 @@ const Dashboard = () => {
             <Box height="200px">
               <GeographyChart isDashboard={true} />
             </Box>
-          </Box>
+          </Box> */}
         </Box>
       </Box>
     </div>
