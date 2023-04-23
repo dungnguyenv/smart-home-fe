@@ -5,8 +5,8 @@ import { useState } from "react";
 const angleInterval = (angle, setAngle, actualProgress) => {
   var anotherAngle = angle;
   var angleProcess = setInterval(function () {
-    setAngle(angle => angle + 1)
-    anotherAngle = anotherAngle + 1;
+    setAngle(angle => angle + 3)
+    anotherAngle = anotherAngle + 3;
     if (anotherAngle > parseInt(actualProgress)) {
       clearInterval(angleProcess);
     }
@@ -14,7 +14,7 @@ const angleInterval = (angle, setAngle, actualProgress) => {
 }
 
 
-const ProgressCircle = ({ progress = "0.75", size = "40" }) => {
+const ProgressCircle = ({ progress = "0.75", size = "60" }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const actualProgress = Math.floor(progress * 360);

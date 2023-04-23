@@ -16,7 +16,7 @@ import ProgressCircle from "../../components/ProgressCircle";
 import React, { useState } from "react";
 import { blue } from "@mui/material/colors";
 
-const Dashboard = () => {
+const Dashboard = ({ authentication }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [smartTv, setSmartTv] = useState({

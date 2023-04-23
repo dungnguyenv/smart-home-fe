@@ -20,6 +20,8 @@ import YardRoundedIcon from '@mui/icons-material/YardRounded';
 import KitchenRoundedIcon from '@mui/icons-material/KitchenRounded';
 import BedRoundedIcon from '@mui/icons-material/BedRounded';
 import BathtubRoundedIcon from '@mui/icons-material/BathtubRounded';
+import { Button } from "@mui/material";
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -39,7 +41,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
   );
 };
 
-const Sidebar = () => {
+const Sidebar = ({ authentication }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -116,6 +118,25 @@ const Sidebar = () => {
                 <Typography variant="h5" color={colors.greenAccent[500]}>
                   Home Admin
                 </Typography>
+                <Box>
+                  <Button
+                    sx={{
+                      backgroundColor: colors.blueAccent[700],
+                      color: colors.grey[100],
+                      fontSize: "10px",
+                      fontWeight: "bold",
+                      padding: "7px 10px",
+                      borderRadius: "20px"
+                    }}
+                    onClick={() => {
+                      console.log("You have just clicked me to Sign Out!")
+                      authentication.setIsAuthenticated(false)
+                    }}
+                  >
+                    <LogoutIcon sx={{ mr: "12px" }} />
+                    Sign Out
+                  </Button>
+                </Box>
               </Box>
             </Box>
           )}
@@ -182,13 +203,13 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <Item
+            {/* <Item
               title="Invoices Balances"
               to="/invoices"
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
 
             <Typography
               variant="h6"
