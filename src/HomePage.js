@@ -37,7 +37,6 @@ const HomePage = ({ authentication }) => {
               <Routes>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/bedroom" element={<BedRoom />} />
-                <Route path="/bathroom" element={<LoginForm />} />
                 <Route path="/team" element={<Team />} />
                 <Route path="/contacts" element={<Contacts />} />
                 <Route path="/form" element={<Form />} />

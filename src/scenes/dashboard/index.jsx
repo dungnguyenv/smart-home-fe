@@ -211,7 +211,7 @@ const Dashboard = ({ authentication }) => {
                   fontWeight="bold"
                   color={colors.greenAccent[500]}
                 >
-                  Now: 39.5 &#176;C
+                  Now: {39.5} &#176;C
                 </Typography>
               </Box>
               <Box>
