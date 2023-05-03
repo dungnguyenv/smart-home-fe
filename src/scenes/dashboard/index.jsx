@@ -13,10 +13,17 @@ import GeographyChart from "../../components/GeographyChart";
 import BarChart from "../../components/BarChart";
 import StatBox from "../../components/StatBox";
 import ProgressCircle from "../../components/ProgressCircle";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { blue } from "@mui/material/colors";
+import { database } from "../../firebase/FirebaseConfig";
+import { getDatabase, ref, onValue } from "firebase/database";
+
+const getTimeOn = (timeStr) => {
+  return ((new Date().getTime() - new Date(timeStr).getTime()) / (1000 * 60 * 60)).toFixed(2);
+}
 
 const Dashboard = ({ authentication }) => {
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [smartTv, setSmartTv] = useState({
@@ -24,6 +31,26 @@ const Dashboard = ({ authentication }) => {
     "statusName": "ON",
     "timeOn": 2.1
   })
+
+  useEffect(() => {
+    onValue(ref(database, '/smart-home-api/living-room'), (snapshot) => {
+      //   const username = (snapshot.val() && snapshot.val().username) || 'Anonymous';\
+      console.log("Data: " + JSON.stringify(snapshot.val()))
+      console.log("Smart TV: status " + snapshot.val()['smart-tv'].status)
+      setSmartTv({
+        "status": snapshot.val()['smart-tv'].status,
+        "statusName": snapshot.val()['smart-tv'].status ? "ON" : "OFF",
+        "timeOn": getTimeOn(snapshot.val()['smart-tv'].time)
+      })
+      // ...
+    }, {
+      onlyOnce: false
+    });
+  }, [])
+
+
+
+
 
   return (
     <div>
@@ -69,7 +96,7 @@ const Dashboard = ({ authentication }) => {
               title="Smart TV"
               subtitle={"Status: " + smartTv.statusName}
               progress="0.75"
-              increase={"Time: " + smartTv.timeOn}
+              increase={"Time: " + smartTv.timeOn + "h"}
               icon={
                 <TvIcon
                   sx={{ color: colors.greenAccent[600], fontSize: "40px" }}
