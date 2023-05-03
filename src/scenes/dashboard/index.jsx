@@ -17,6 +17,7 @@ import React, { useEffect, useState } from "react";
 import { blue } from "@mui/material/colors";
 import { database } from "../../firebase/FirebaseConfig";
 import { getDatabase, ref, onValue } from "firebase/database";
+import { chatGPTRequest } from "../../openai/ChatGPT";
 
 const getTimeOn = (timeStr) => {
   return ((new Date().getTime() - new Date(timeStr).getTime()) / (1000 * 60 * 60)).toFixed(2);
@@ -32,7 +33,10 @@ const Dashboard = ({ authentication }) => {
     "timeOn": 2.1
   })
 
+
   useEffect(() => {
+    console.log("Call Chat GPT")
+    chatGPTRequest([{ "role": "user", "content": "what is reactjs?" }])
     onValue(ref(database, '/smart-home-api/living-room'), (snapshot) => {
       //   const username = (snapshot.val() && snapshot.val().username) || 'Anonymous';\
       console.log("Data: " + JSON.stringify(snapshot.val()))
