@@ -17,6 +17,7 @@ import { ColorModeContext, useMode } from "./theme";
 import Calendar from "./scenes/calendar/calendar";
 import BedRoom from "./scenes/dashboard/BedRoom";
 import LoginForm from "./scenes/login/LoginForm";
+import ChatBox from "./scenes/dashboard/ChatBox";
 
 const HomePage = ({ authentication }) => {
   const [theme, colorMode] = useMode();
@@ -36,7 +37,7 @@ const HomePage = ({ authentication }) => {
 
               <Routes>
                 <Route path="/" element={<Dashboard />} />
-                <Route path="/bedroom" element={<BedRoom />} />
+                <Route path="/bedroom" element={<ChatBox />} />
                 <Route path="/team" element={<Team />} />
                 <Route path="/contacts" element={<Contacts />} />
                 <Route path="/form" element={<Form />} />
