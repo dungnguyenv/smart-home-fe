@@ -5,9 +5,9 @@ import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import SmartToyIcon from '@mui/icons-material/SmartToy';
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
-import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
@@ -22,6 +22,7 @@ import BedRoundedIcon from '@mui/icons-material/BedRounded';
 import BathtubRoundedIcon from '@mui/icons-material/BathtubRounded';
 import { Button } from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
+import { sendLog } from "../../firebase/FirebaseConfig";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -102,7 +103,8 @@ const Sidebar = ({ authentication }) => {
                   alt="profile-user"
                   width="100px"
                   height="100px"
-                  src={`../../assets/images/dungnguyen.jpg`}
+                  // src={`../../assets/images/dungnguyen.jpg`}
+                  src={authentication.user.avatar}
                   style={{ cursor: "pointer", borderRadius: "50%" }}
                 />
               </Box>
@@ -113,7 +115,7 @@ const Sidebar = ({ authentication }) => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  Dung Nguyen
+                  {authentication.user["user-full-name"]}
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
                   Home Admin
@@ -131,6 +133,12 @@ const Sidebar = ({ authentication }) => {
                     onClick={() => {
                       console.log("You have just clicked me to Sign Out!")
                       authentication.setIsAuthenticated(false)
+                      sendLog({
+                        "action": "Sign out",
+                        "time": (new Date).getTime(),
+                        "user-id": authentication.user.id,
+                        "user-full-name": authentication.user["user-full-name"]
+                      })
                     }}
                   >
                     <LogoutIcon sx={{ mr: "12px" }} />
@@ -178,6 +186,14 @@ const Sidebar = ({ authentication }) => {
               title="Garden"
               to="/garden"
               icon={<YardRoundedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="Chatbot"
+              to="/chatbot"
+              icon={<SmartToyIcon />}
               selected={selected}
               setSelected={setSelected}
             />

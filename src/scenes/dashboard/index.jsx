@@ -13,17 +13,89 @@ import GeographyChart from "../../components/GeographyChart";
 import BarChart from "../../components/BarChart";
 import StatBox from "../../components/StatBox";
 import ProgressCircle from "../../components/ProgressCircle";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { blue } from "@mui/material/colors";
+import { database, writeDataToPath, sendLog } from "../../firebase/FirebaseConfig";
+import { getDatabase, ref, onValue } from "firebase/database";
+import { chatGPTRequest } from "../../openai/ChatGPT";
+import { getTimeOn, formatDateToString } from "../../firebase/CommonFunction";
+
 
 const Dashboard = ({ authentication }) => {
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [smartTv, setSmartTv] = useState({
-    "status": true,
-    "statusName": "ON",
-    "timeOn": 2.1
-  })
+  const [histories, setHistories] = useState([])
+  const [smartTv, setSmartTv] = useState({});
+  const [firstLight, setFirstLight] = useState({});
+  const [secondLight, setSecondLight] = useState({});
+  const [door, setDoor] = useState({});
+  const [curtains, setCurtains] = useState({});
+
+  const [dht11, setDht11] = useState({
+    "temperature": {
+      "value": null
+    },
+    "humidity": {
+      "value": null
+    }
+  });
+
+
+  useEffect(() => {
+    onValue(ref(database, '/smart-home/living-room/devices'), (snapshot) => {
+      //   const username = (snapshot.val() && snapshot.val().username) || 'Anonymous';\
+      console.log("Data: " + JSON.stringify(snapshot.val()))
+      console.log("Smart TV: status " + snapshot.val()['tv']['status'])
+      setSmartTv({
+        "status": snapshot.val()['tv']['status'],
+        "statusName": snapshot.val()['tv']['status'] == 1 ? "ON" : "OFF",
+        "timeOn": getTimeOn(snapshot.val()['tv']['time-on'])
+      })
+
+      setFirstLight({
+        "status": snapshot.val()['light1']['status'],
+        "statusName": snapshot.val()['light1']['status'] == 1 ? "ON" : "OFF",
+        "timeOn": getTimeOn(snapshot.val()['light1']['time-on'])
+      })
+
+      setSecondLight({
+        "status": snapshot.val()['light2']['status'],
+        "statusName": snapshot.val()['light2']['status'] == 1 ? "ON" : "OFF",
+        "timeOn": getTimeOn(snapshot.val()['light2']['time-on'])
+      })
+
+      setDoor({
+        "status": snapshot.val()['door']['status'],
+        "statusName": snapshot.val()['door']['status'] == 1 ? "ON" : "OFF",
+        "timeOn": getTimeOn(snapshot.val()['door']['time-on'])
+      })
+
+      setCurtains({
+        "status": snapshot.val()['curtains']['status'],
+        "statusName": snapshot.val()['curtains']['status'] == 1 ? "ON" : "OFF",
+        "timeOn": getTimeOn(snapshot.val()['curtains']['time-on'])
+      })
+
+      setDht11(snapshot.val()["dht11"])
+    }, {
+      onlyOnce: false
+    });
+
+    onValue(ref(database, '/smart-home/logs'), (snapshot) => {
+      console.log(snapshot.val())
+      // Convert the object to an array of objects
+      const dataArray = Object.values(snapshot.val().content);
+      // Sort the array in descending order based on the "time" property
+      dataArray.sort((a, b) => b.time - a.time);
+
+      console.log(dataArray);
+      setHistories(dataArray.slice(0, 100))
+    }, {
+      onlyOnce: false
+    });
+  }, [])
+
 
   return (
     <div>
@@ -68,8 +140,8 @@ const Dashboard = ({ authentication }) => {
             <StatBox
               title="Smart TV"
               subtitle={"Status: " + smartTv.statusName}
-              progress="0.75"
-              increase={"Time: " + smartTv.timeOn}
+              progress={(smartTv.status == 1 ? smartTv.timeOn : 0)}
+              increase={"Time: " + (smartTv.status == 1 ? smartTv.timeOn : 0) + "h"}
               icon={
                 <TvIcon
                   sx={{ color: colors.greenAccent[600], fontSize: "40px" }}
@@ -78,16 +150,19 @@ const Dashboard = ({ authentication }) => {
             />
             <Switch
               checked={smartTv.status}
-              defaultChecked
               onClick={() => {
-                setSmartTv({
-                  "status": !smartTv.status,
-                  "statusName": smartTv.status ? "OFF" : "ON",
-                  "timeOn": smartTv.status ? 0 : 2.1
+                writeDataToPath("/smart-home/living-room/devices/tv", {
+                  "status": smartTv.status == 1 ? 0 : 1,
+                  "time-on": smartTv.status == 1 ? 0 : (new Date()).getTime()
+                })
+                sendLog({
+                  "action": smartTv.status == 1 ? "Turn off living room TV" : "Turn on living room TV",
+                  "time": (new Date).getTime(),
+                  "user-id": authentication.user.id,
+                  "user-full-name": authentication.user["user-full-name"]
                 })
               }}
             >
-              {/* <DownloadOutlinedIcon sx={{ mr: "10px" }} /> */}
 
             </Switch>
           </Box>
@@ -100,9 +175,9 @@ const Dashboard = ({ authentication }) => {
           >
             <StatBox
               title="Light"
-              subtitle="Status: ON"
-              progress="0.50"
-              increase="Time: 3.5h"
+              subtitle={"Status: " + firstLight.statusName}
+              progress={(firstLight.status == 1 ? firstLight.timeOn : 0)}
+              increase={"Time: " + (firstLight.status == 1 ? firstLight.timeOn : 0) + "h"}
               icon={
                 <LightModeTwoToneIcon
                   sx={{ color: colors.greenAccent[600], fontSize: "40px" }}
@@ -110,18 +185,21 @@ const Dashboard = ({ authentication }) => {
               }
             />
             <Switch
-              checked={smartTv.status}
-              defaultChecked
+              checked={firstLight.status}
+
               onClick={() => {
-                setSmartTv({
-                  "status": !smartTv.status,
-                  "statusName": smartTv.status ? "OFF" : "ON",
-                  "timeOn": smartTv.status ? 0 : 2.1
+                writeDataToPath("/smart-home/living-room/devices/light1", {
+                  "status": firstLight.status == 1 ? 0 : 1,
+                  "time-on": firstLight.status == 1 ? 0 : (new Date()).getTime()
+                })
+                sendLog({
+                  "action": firstLight.status == 1 ? "Turn off living room light" : "Turn on living room light",
+                  "time": (new Date).getTime(),
+                  "user-id": authentication.user.id,
+                  "user-full-name": authentication.user["user-full-name"]
                 })
               }}
             >
-              {/* <DownloadOutlinedIcon sx={{ mr: "10px" }} /> */}
-
             </Switch>
           </Box>
           <Box
@@ -133,9 +211,9 @@ const Dashboard = ({ authentication }) => {
           >
             <StatBox
               title="Door"
-              subtitle="Status: ON"
-              progress="0.30"
-              increase=""
+              subtitle={"Status: " + door.statusName}
+              progress={(door.status == 1 ? door.timeOn : 0)}
+              increase={"Time: " + (door.status == 1 ? door.timeOn : 0) + "h"}
               icon={
                 <DoorFrontTwoToneIcon
                   sx={{ color: colors.greenAccent[600], fontSize: "40px" }}
@@ -143,13 +221,18 @@ const Dashboard = ({ authentication }) => {
               }
             />
             <Switch
-              checked={smartTv.status}
-              defaultChecked
+              checked={door.status}
+
               onClick={() => {
-                setSmartTv({
-                  "status": !smartTv.status,
-                  "statusName": smartTv.status ? "OFF" : "ON",
-                  "timeOn": smartTv.status ? 0 : 2.1
+                writeDataToPath("/smart-home/living-room/devices/door", {
+                  "status": door.status == 1 ? 0 : 1,
+                  "time-on": door.status == 1 ? 0 : (new Date()).getTime()
+                })
+                sendLog({
+                  "action": door.status == 1 ? "Close living room door" : "Open living room door",
+                  "time": (new Date).getTime(),
+                  "user-id": authentication.user.id,
+                  "user-full-name": authentication.user["user-full-name"]
                 })
               }}
             ></Switch>
@@ -163,9 +246,9 @@ const Dashboard = ({ authentication }) => {
           >
             <StatBox
               title="Curtains"
-              subtitle="Status: ON"
-              progress="0.80"
-              increase="Time: 3.2h"
+              subtitle={"Status: " + curtains.statusName}
+              progress={(curtains.status == 1 ? curtains.timeOn : 0)}
+              increase={"Time: " + (curtains.status == 1 ? curtains.timeOn : 0) + "h"}
               icon={
                 <BlindsTwoToneIcon
                   sx={{ color: colors.greenAccent[600], fontSize: "40px" }}
@@ -173,13 +256,18 @@ const Dashboard = ({ authentication }) => {
               }
             />
             <Switch
-              checked={smartTv.status}
-              defaultChecked
+              checked={curtains.status}
+
               onClick={() => {
-                setSmartTv({
-                  "status": !smartTv.status,
-                  "statusName": smartTv.status ? "OFF" : "ON",
-                  "timeOn": smartTv.status ? 0 : 2.1
+                writeDataToPath("/smart-home/living-room/devices/curtains", {
+                  "status": curtains.status == 1 ? 0 : 1,
+                  "time-on": curtains.status == 1 ? 0 : (new Date()).getTime()
+                })
+                sendLog({
+                  "action": curtains.status == 1 ? "Close living room curtains" : "Open living room curtains",
+                  "time": (new Date).getTime(),
+                  "user-id": authentication.user.id,
+                  "user-full-name": authentication.user["user-full-name"]
                 })
               }}
             ></Switch>
@@ -211,7 +299,7 @@ const Dashboard = ({ authentication }) => {
                   fontWeight="bold"
                   color={colors.greenAccent[500]}
                 >
-                  Now: 39.5 &#176;C
+                  Now: {dht11.temperature.value} &#176;C
                 </Typography>
               </Box>
               <Box>
@@ -244,9 +332,9 @@ const Dashboard = ({ authentication }) => {
                 Histories
               </Typography>
             </Box>
-            {mockHistories.map((history, i) => (
+            {histories.map((history, i) => (
               <Box
-                key={`${history.txId}-${i}`}
+                key={`${history.time}-${i}`}
                 display="flex"
                 justifyContent="space-between"
                 alignItems="center"
@@ -259,10 +347,10 @@ const Dashboard = ({ authentication }) => {
                     variant="h5"
                     fontWeight="600"
                   >
-                    {history.txId}
+                    {formatDateToString(new Date(history.time))}
                   </Typography>
                   <Typography color={colors.grey[100]}>
-                    {history.user}
+                    {history["user-full-name"]}
                   </Typography>
                 </Box>
                 <Box color={colors.grey[100]}>{history.date}</Box>
@@ -293,15 +381,15 @@ const Dashboard = ({ authentication }) => {
               alignItems="center"
               mt="25px"
             >
-              <ProgressCircle progress="0.8015" size="125" />
+              <ProgressCircle progress={dht11.humidity.value / 100} size="125" />
               <Typography
                 variant="h5"
                 color={colors.greenAccent[500]}
                 sx={{ mt: "15px" }}
               >
-                80.15%
+                {dht11.humidity.value}%
               </Typography>
-              <Typography>Includes extra misc expenditures and costs</Typography>
+              <Typography>Humidity is measured in the room</Typography>
             </Box>
           </Box>
           <Box
@@ -314,7 +402,7 @@ const Dashboard = ({ authentication }) => {
               fontWeight="600"
               sx={{ padding: "30px 30px 0 30px" }}
             >
-              Sales Quantity
+              Rainfall Chart
             </Typography>
             <Box height="250px" mt="-20px">
               <BarChart isDashboard={true} />

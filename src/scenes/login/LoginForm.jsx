@@ -5,7 +5,7 @@ import Input from "../../components/Input";
 import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
 import { useState } from "react";
 import { mockDataAccount } from "../../data/AccountDataMock";
-
+import { sendLog } from "../../firebase/FirebaseConfig";
 
 const LoginForm = ({ authentication }) => {
   const FacebookBackground =
@@ -27,14 +27,12 @@ const LoginForm = ({ authentication }) => {
             "username": event.target.value,
             "password": loginData.password
           })
-          console.log(loginData)
         }} />
         <Input type="password" placeholder="Password" value={loginData.password} onChange={(event) => {
           setLoginData({
             "username": loginData.username,
             "password": event.target.value
           })
-          console.log(loginData)
         }} />
       </InputContainer>
       <ButtonContainer>
@@ -44,10 +42,16 @@ const LoginForm = ({ authentication }) => {
           if (account == null) {
 
           } else {
-            console.log("account: " + account.username)
             if (account.password == loginData.password) {
-              console.log("Login Successfully!")
+              console.log("Login Successfully! ", account)
               authentication.setIsAuthenticated(true)
+              authentication.setUser(account)
+              sendLog({
+                "action": "Sign in",
+                "time": (new Date).getTime(),
+                "user-id": account.id,
+                "user-full-name": account["user-full-name"]
+              })
             }
           }
 
