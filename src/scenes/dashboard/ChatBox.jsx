@@ -9,22 +9,21 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 const chatGptSendMessage = async (message, setMessage, newMessage) => {
+    var messageSendToChatBot = message.map(mes => {
+        return {
+            "role": mes.user.id == 'mark' ? "assistant" : "user",
+            "content": mes.text
+        };
+    });
+    console.log(messageSendToChatBot)
     const completion = await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
-        messages: [
-
-            { "role": "user", "content": newMessage.text }
-        ],
+        messages: messageSendToChatBot,
     });
     console.log(message)
     let response = completion.data.choices[0].message.content + "\n";
     console.log(response);
-    // setMessage([...message,
-    //     newMessage,
-    // ])
-
-    // const currentMessage = [...message, newMessage]
-    setMessage([...message,
+    setMessage(message => [...message,
     {
         "user": {
             "id": "mark",
@@ -38,14 +37,14 @@ const chatGptSendMessage = async (message, setMessage, newMessage) => {
 
 const ChatBox = () => {
     const [message, setMessage] = useState([
-        {
-            "user": {
-                "id": "danny_1",
-                "name": "Daniel Georgetown",
+        // {
+        //     "user": {
+        //         "id": "danny_1",
+        //         "name": "Daniel Georgetown",
 
-            },
-            "text": "first message"
-        },
+        //     },
+        //     "text": "first message"
+        // },
         {
             "user": {
                 "id": "mark",
@@ -53,12 +52,12 @@ const ChatBox = () => {
                 avatar: "https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg"
 
             },
-            "text": "hello"
+            "text": "Hello, I am a AI Chatbot"
         }])
 
     return (
         <div style={{ display: "flex", justifyContent: 'right' }}>
-            <div style={{ height: '90vh', width: '60vh', marginRight: "1vh" }}>
+            <div style={{ height: '90vh', width: '70vh', marginRight: "1vh" }}>
                 <MainContainer
                     inbox={{
                         // onScrollToBottom: () => { },
@@ -73,19 +72,19 @@ const ChatBox = () => {
                             themeColor: "#6ea9d7",
                             messages: message,
                             header: "Chatbot",
-                            currentUserId: "danny_1",
+                            currentUserId: "dungnguyen",
                             onSendMessage: async (text) => {
                                 console.log("onSendMessage: " + text)
                                 const newMessage = {
                                     "user": {
-                                        "id": "danny_1",
+                                        "id": "dungnguyen",
                                         "name": "Daniel Georgetown",
 
                                     },
                                     "text": text
                                 }
                                 setMessage(
-                                    [
+                                    message => [
                                         ...message,
                                         newMessage,
                                     ]
@@ -100,7 +99,6 @@ const ChatBox = () => {
                             onBack: () => { console.log("On back") },
                             onAttachClick: () => { console.log("Attach File") },
                             sendMessageLoading: true,
-
                         }
                     }
                     mobileView={true}

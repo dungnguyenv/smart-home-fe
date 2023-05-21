@@ -36,8 +36,9 @@ const HomePage = ({ authentication }) => {
               <Topbar setIsSidebar={setIsSidebar} />
 
               <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/bedroom" element={<ChatBox />} />
+                <Route path="/" element={<Dashboard authentication={authentication} />} />
+                <Route path="/bedroom" element={<BedRoom />} />
+                <Route path="/chatbot" element={<ChatBox />} />
                 <Route path="/team" element={<Team />} />
                 <Route path="/contacts" element={<Contacts />} />
                 <Route path="/form" element={<Form />} />

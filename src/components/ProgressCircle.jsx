@@ -1,32 +1,27 @@
 import { Box, useTheme } from "@mui/material";
 import { tokens } from "../theme";
-import { useState } from "react";
-
-const angleInterval = (angle, setAngle, actualProgress) => {
-  var anotherAngle = angle;
-  var angleProcess = setInterval(function () {
-    setAngle(angle => angle + 3)
-    anotherAngle = anotherAngle + 3;
-    if (anotherAngle > parseInt(actualProgress)) {
-      clearInterval(angleProcess);
-    }
-  }, 1);
-}
-
+import { useEffect, useState } from "react";
 
 const ProgressCircle = ({ progress = "0.75", size = "60" }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const actualProgress = Math.floor(progress * 360);
-  const [angle, setAngle] = useState(1);
-  const [angleIntervalIsStarted, setAngleIntervalIsStarted] = useState(false);
+  const [angle, setAngle] = useState(0);
 
-  if (angleIntervalIsStarted === false) {
-    console.log("Angle: " + angle)
-    console.log("actualProcess: " + actualProgress)
-    setAngleIntervalIsStarted(true);
-    angleInterval(angle, setAngle, actualProgress);
-  }
+  useEffect(() => {
+    var actualProgress = Math.floor(progress * 360);
+    setAngle(0);
+    var anotherAngle = 0;
+    if (actualProgress > 0) {
+      var angleProcess = setInterval(function () {
+        setAngle(angle => angle + 3)
+        anotherAngle = anotherAngle + 3;
+        if (anotherAngle > parseInt(actualProgress)) {
+          clearInterval(angleProcess);
+        }
+      }, 1);
+    }
+
+  }, [progress])
 
   return (
     <Box
