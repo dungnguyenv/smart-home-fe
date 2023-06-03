@@ -18,7 +18,7 @@ import Calendar from "./scenes/calendar/calendar";
 import BedRoom from "./scenes/dashboard/BedRoom";
 import LoginForm from "./scenes/login/LoginForm";
 import ChatBox from "./scenes/dashboard/ChatBox";
-
+import Camera from "./scenes/dashboard/Camera";
 const HomePage = ({ authentication }) => {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
@@ -39,6 +39,7 @@ const HomePage = ({ authentication }) => {
                 <Route path="/" element={<Dashboard authentication={authentication} />} />
                 <Route path="/bedroom" element={<BedRoom />} />
                 <Route path="/chatbot" element={<ChatBox />} />
+                <Route path="/camera" element={<Camera />} />
                 <Route path="/team" element={<Team />} />
                 <Route path="/contacts" element={<Contacts />} />
                 <Route path="/form" element={<Form />} />

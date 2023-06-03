@@ -198,6 +198,14 @@ const Sidebar = ({ authentication }) => {
               setSelected={setSelected}
             />
 
+            <Item
+              title="Camera"
+              to="/camera"
+              icon={<BathtubRoundedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
             <Typography
               variant="h6"
               color={colors.grey[300]}

@@ -5,7 +5,7 @@ import LoginScreen from "./scenes/login/LoginScreen";
 
 
 function App() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [isAuthenticated, setIsAuthenticated] = useState(true)
     const [user, setUser] = useState({})
     return (
         isAuthenticated ?
