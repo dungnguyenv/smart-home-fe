@@ -159,7 +159,7 @@ const Dashboard = ({ authentication }) => {
                   "action": smartTv.status == 1 ? "Turn off living room TV" : "Turn on living room TV",
                   "time": (new Date).getTime(),
                   "user-id": authentication.user.id,
-                  "user-full-name": authentication.user["user-full-name"]
+                  "user-full-name": authentication.user["fullName"]
                 })
               }}
             >
@@ -196,7 +196,7 @@ const Dashboard = ({ authentication }) => {
                   "action": firstLight.status == 1 ? "Turn off living room light" : "Turn on living room light",
                   "time": (new Date).getTime(),
                   "user-id": authentication.user.id,
-                  "user-full-name": authentication.user["user-full-name"]
+                  "user-full-name": authentication.user["fullName"]
                 })
               }}
             >
@@ -232,7 +232,7 @@ const Dashboard = ({ authentication }) => {
                   "action": door.status == 1 ? "Close living room door" : "Open living room door",
                   "time": (new Date).getTime(),
                   "user-id": authentication.user.id,
-                  "user-full-name": authentication.user["user-full-name"]
+                  "user-full-name": authentication.user["fullName"]
                 })
               }}
             ></Switch>
@@ -267,7 +267,7 @@ const Dashboard = ({ authentication }) => {
                   "action": curtains.status == 1 ? "Close living room curtains" : "Open living room curtains",
                   "time": (new Date).getTime(),
                   "user-id": authentication.user.id,
-                  "user-full-name": authentication.user["user-full-name"]
+                  "user-full-name": authentication.user["fullName"]
                 })
               }}
             ></Switch>

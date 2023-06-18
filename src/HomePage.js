@@ -25,20 +25,20 @@ const HomePage = ({ authentication }) => {
 
 
   return (
-    <div style={{ height: "auto" }}>
+    <div style={{ height: "100%" }}>
       <ColorModeContext.Provider value={colorMode}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <div className="app" >
-            <Sidebar isSidebar={isSidebar} authentication={authentication} />
+            <Sidebar className="sidebar" isSidebar={isSidebar} authentication={authentication} />
 
-            <main className="content" >
+            <main className="content">
               <Topbar setIsSidebar={setIsSidebar} />
-
+              <ChatBox />
               <Routes>
                 <Route path="/" element={<Dashboard authentication={authentication} />} />
                 <Route path="/bedroom" element={<BedRoom />} />
-                <Route path="/chatbot" element={<ChatBox />} />
+                {/* <Route path="/chatbot" element={<ChatBox />} /> */}
                 <Route path="/camera" element={<Camera />} />
                 <Route path="/team" element={<Team />} />
                 <Route path="/contacts" element={<Contacts />} />

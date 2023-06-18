@@ -22,6 +22,7 @@ import BedRoundedIcon from '@mui/icons-material/BedRounded';
 import BathtubRoundedIcon from '@mui/icons-material/BathtubRounded';
 import { Button } from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
+import CameraOutdoorIcon from '@mui/icons-material/CameraOutdoor';
 import { sendLog } from "../../firebase/FirebaseConfig";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
@@ -104,7 +105,7 @@ const Sidebar = ({ authentication }) => {
                   width="100px"
                   height="100px"
                   // src={`../../assets/images/dungnguyen.jpg`}
-                  src={authentication.user.avatar}
+                  src={authentication.user.image1}
                   style={{ cursor: "pointer", borderRadius: "50%" }}
                 />
               </Box>
@@ -115,7 +116,7 @@ const Sidebar = ({ authentication }) => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  {authentication.user["user-full-name"]}
+                  {authentication.user["fullName"]}
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
                   Home Admin
@@ -137,7 +138,7 @@ const Sidebar = ({ authentication }) => {
                         "action": "Sign out",
                         "time": (new Date).getTime(),
                         "user-id": authentication.user.id,
-                        "user-full-name": authentication.user["user-full-name"]
+                        "user-full-name": authentication.user["fullName"]
                       })
                     }}
                   >
@@ -190,18 +191,18 @@ const Sidebar = ({ authentication }) => {
               setSelected={setSelected}
             />
 
-            <Item
+            {/* <Item
               title="Chatbot"
               to="/chatbot"
               icon={<SmartToyIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
 
             <Item
               title="Camera"
               to="/camera"
-              icon={<BathtubRoundedIcon />}
+              icon={<CameraOutdoorIcon />}
               selected={selected}
               setSelected={setSelected}
             />

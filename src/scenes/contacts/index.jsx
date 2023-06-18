@@ -4,29 +4,43 @@ import { tokens } from "../../theme";
 import { mockDataContacts } from "../../data/mockData";
 import Header from "../../components/Header";
 import { useTheme } from "@mui/material";
+import { getDatabase, ref, onValue } from "firebase/database";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useState, useEffect } from "react";
+import { database } from "../../firebase/FirebaseConfig";
 
 const Contacts = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [users, setUsers] = useState([])
+  useEffect(() => {
+    onValue(ref(database, '/users'), (snapshot) => {
+      console.log("Data: " + JSON.stringify(snapshot.val()))
 
+      setUsers(Object.values(snapshot.val()))
+    }, {
+      onlyOnce: false
+    });
+  }, [])
   const columns = [
     { field: "id", headerName: "ID", flex: 0.5 },
-    { field: "registrarId", headerName: "Registrar ID" },
+    { field: "username", headerName: "Username" },
     {
-      field: "name",
-      headerName: "Name",
+      field: "fullName",
+      headerName: "Full Name",
       flex: 1,
       cellClassName: "name-column--cell",
     },
+    // {
+    //   field: "age",
+    //   headerName: "Age",
+    //   type: "number",
+    //   headerAlign: "left",
+    //   align: "left",
+    // },
     {
-      field: "age",
-      headerName: "Age",
-      type: "number",
-      headerAlign: "left",
-      align: "left",
-    },
-    {
-      field: "phone",
+      field: "contact",
       headerName: "Phone Number",
       flex: 1,
     },
@@ -36,20 +50,20 @@ const Contacts = () => {
       flex: 1,
     },
     {
-      field: "address",
-      headerName: "Address",
+      field: "address1",
+      headerName: "Address 1",
       flex: 1,
     },
     {
-      field: "city",
-      headerName: "City",
+      field: "address2",
+      headerName: "Address 2",
       flex: 1,
     },
-    {
-      field: "zipCode",
-      headerName: "Zip Code",
-      flex: 1,
-    },
+    // {
+    //   field: "registerDate",
+    //   headerName: "Register Date",
+    //   flex: 1,
+    // },
   ];
 
   return (
@@ -91,7 +105,7 @@ const Contacts = () => {
         }}
       >
         <DataGrid
-          rows={mockDataContacts}
+          rows={users}
           columns={columns}
           components={{ Toolbar: GridToolbar }}
         />

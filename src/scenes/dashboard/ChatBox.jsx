@@ -4,14 +4,14 @@ import { useState } from "react";
 const { Configuration, OpenAIApi } = require("openai");
 
 const configuration = new Configuration({
-    apiKey: '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',
+    apiKey: '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',
 });
 const openai = new OpenAIApi(configuration);
 
 const chatGptSendMessage = async (message, setMessage, newMessage) => {
     var messageSendToChatBot = message.map(mes => {
         return {
-            "role": mes.user.id == 'mark' ? "assistant" : "user",
+            "role": mes.user.id === 'mark' ? "assistant" : "user",
             "content": mes.text
         };
     });
@@ -36,6 +36,7 @@ const chatGptSendMessage = async (message, setMessage, newMessage) => {
 }
 
 const ChatBox = () => {
+    const [showChatBot, setShowChatBot] = useState(false);
     const [message, setMessage] = useState([
         // {
         //     "user": {
@@ -56,8 +57,11 @@ const ChatBox = () => {
         }])
 
     return (
-        <div style={{ display: "flex", justifyContent: 'right' }}>
-            <div style={{ height: '90vh', width: '70vh', marginRight: "1vh" }}>
+        <div>
+            <div className="chatbot-icon" onClick={() => setShowChatBot(!showChatBot)}>
+                <img src="https://cdn.dribbble.com/users/279657/screenshots/2701628/chatbot.png" alt="" />
+            </div>
+            <div className={`${showChatBot ? "chatbot" : "chatbot hide"}`}>
                 <MainContainer
                     inbox={{
                         // onScrollToBottom: () => { },
@@ -96,7 +100,7 @@ const ChatBox = () => {
                                 await chatGptSendMessage(currentMessage, setMessage, newMessage)
                                 console.log("End!")
                             },
-                            onBack: () => { console.log("On back") },
+                            onBack: () => { setShowChatBot(false) },
                             onAttachClick: () => { console.log("Attach File") },
                             sendMessageLoading: true,
                         }
@@ -104,7 +108,7 @@ const ChatBox = () => {
                     mobileView={true}
                 ></MainContainer>
             </div>
-        </div>
+        </div >
     );
 }
 export default ChatBox;

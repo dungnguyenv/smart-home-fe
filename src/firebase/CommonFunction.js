@@ -12,4 +12,10 @@ const formatDateToString = (date) => {
     return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
 
-export { getTimeOn, formatDateToString };
+const formatFloat = (number) => {
+    if (!number) return "0.00%"
+    // return number.toFixed(2);
+    return Math.floor(number * 100) / 100;
+}
+
+export { getTimeOn, formatDateToString, formatFloat };

@@ -3,9 +3,13 @@ import Button from "../../components/Button";
 import Icon from "../../components/Icon";
 import Input from "../../components/Input";
 import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { mockDataAccount } from "../../data/AccountDataMock";
 import { sendLog } from "../../firebase/FirebaseConfig";
+import { database } from "../../firebase/FirebaseConfig";
+import { getDatabase, ref, onValue } from "firebase/database";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LoginForm = ({ authentication }) => {
   const FacebookBackground =
@@ -18,60 +22,87 @@ const LoginForm = ({ authentication }) => {
     "username": "",
     "password": ""
   })
+  const defaultToastStyle = {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "dark",
+  }
+  const [users, setUsers] = useState(null)
+  useEffect(() => {
+    onValue(ref(database, '/users'), (snapshot) => {
+      console.log("Data: " + JSON.stringify(snapshot.val()))
+
+      setUsers(Object.values(snapshot.val()))
+    }, {
+      onlyOnce: false
+    });
+  }, [])
   return (
-    <MainContainer>
-      <WelcomeText>Welcome</WelcomeText>
-      <InputContainer>
-        <Input type="text" placeholder="Email" value={loginData.username} onChange={(event) => {
-          setLoginData({
-            "username": event.target.value,
-            "password": loginData.password
-          })
-        }} />
-        <Input type="password" placeholder="Password" value={loginData.password} onChange={(event) => {
-          setLoginData({
-            "username": loginData.username,
-            "password": event.target.value
-          })
-        }} />
-      </InputContainer>
-      <ButtonContainer>
-        <Button content="Sign Up" onClick={() => {
-          console.log("username: " + loginData.username + " password: " + loginData.password)
-          const account = mockDataAccount.find(data => data.username == loginData.username)
-          if (account == null) {
-
-          } else {
-            if (account.password == loginData.password) {
-              console.log("Login Successfully! ", account)
-              authentication.setIsAuthenticated(true)
-              authentication.setUser(account)
-              sendLog({
-                "action": "Sign in",
-                "time": (new Date).getTime(),
-                "user-id": account.id,
-                "user-full-name": account["user-full-name"]
-              })
+    <div>
+      <MainContainer>
+        <WelcomeText>Welcome</WelcomeText>
+        <InputContainer>
+          <Input type="text" placeholder="Email" value={loginData.username} onChange={(event) => {
+            setLoginData({
+              "username": event.target.value,
+              "password": loginData.password
+            })
+          }} />
+          <Input type="password" placeholder="Password" value={loginData.password} onChange={(event) => {
+            setLoginData({
+              "username": loginData.username,
+              "password": event.target.value
+            })
+          }} />
+        </InputContainer>
+        <ButtonContainer>
+          <Button content="Sign Up" onClick={() => {
+            console.log("username: " + loginData.username + " password: " + loginData.password)
+            const account = users.find(data => data.username == loginData.username)
+            if (account == null) {
+              toast.error('Username or password is not correct!', defaultToastStyle);
+            } else {
+              if (account.password == loginData.password) {
+                console.log("Login Successfully! ", account)
+                authentication.setIsAuthenticated(true)
+                authentication.setUser(account)
+                sendLog({
+                  "action": "Sign in",
+                  "time": (new Date).getTime(),
+                  "user-id": account.id,
+                  "user-full-name": account["fullName"]
+                })
+                toast.success('Login successfully!', defaultToastStyle);
+              } else {
+                toast.error('Username or password is not correct!', defaultToastStyle);
+              }
             }
-          }
 
-        }} />
-      </ButtonContainer>
-      <LoginWith>OR LOGIN WITH</LoginWith>
-      <HorizontalRule />
-      <IconsContainer>
-        <Icon color={FacebookBackground}>
-          <FaFacebookF />
-        </Icon>
-        <Icon color={InstagramBackground}>
-          <FaInstagram />
-        </Icon>
-        <Icon color={TwitterBackground}>
-          <FaTwitter />
-        </Icon>
-      </IconsContainer>
-      <ForgotPassword>Forgot Password ?</ForgotPassword>
-    </MainContainer>
+          }} />
+        </ButtonContainer>
+        <LoginWith>OR LOGIN WITH</LoginWith>
+        <HorizontalRule />
+        <IconsContainer>
+          <Icon color={FacebookBackground}>
+            <FaFacebookF />
+          </Icon>
+          <Icon color={InstagramBackground}>
+            <FaInstagram />
+          </Icon>
+          <Icon color={TwitterBackground}>
+            <FaTwitter />
+          </Icon>
+        </IconsContainer>
+        <ForgotPassword>Forgot Password ?</ForgotPassword>
+
+      </MainContainer>
+      <ToastContainer />
+    </div>
   );
 }
 

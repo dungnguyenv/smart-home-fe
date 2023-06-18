@@ -6,27 +6,44 @@ import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettin
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "../../components/Header";
+import { getDatabase, ref, onValue } from "firebase/database";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useState, useEffect } from "react";
+import { database } from "../../firebase/FirebaseConfig";
+
 
 const Team = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [users, setUsers] = useState([])
+  useEffect(() => {
+    onValue(ref(database, '/users'), (snapshot) => {
+      console.log("Data: " + JSON.stringify(snapshot.val()))
+
+      setUsers(Object.values(snapshot.val()))
+    }, {
+      onlyOnce: false
+    });
+  }, [])
   const columns = [
     { field: "id", headerName: "ID" },
     {
-      field: "name",
+      field: "fullName",
       headerName: "Name",
       flex: 1,
       cellClassName: "name-column--cell",
     },
     {
-      field: "age",
-      headerName: "Age",
-      type: "number",
+      field: "username",
+      headerName: "Username",
       headerAlign: "left",
       align: "left",
+      flex: 1,
+      cellClassName: "name-column--cell",
     },
     {
-      field: "phone",
+      field: "contact",
       headerName: "Phone Number",
       flex: 1,
     },
@@ -51,8 +68,8 @@ const Team = () => {
               access === "admin"
                 ? colors.greenAccent[600]
                 : access === "manager"
-                ? colors.greenAccent[700]
-                : colors.greenAccent[700]
+                  ? colors.greenAccent[700]
+                  : colors.greenAccent[700]
             }
             borderRadius="4px"
           >
@@ -100,7 +117,7 @@ const Team = () => {
           },
         }}
       >
-        <DataGrid checkboxSelection rows={mockDataTeam} columns={columns} />
+        <DataGrid checkboxSelection rows={users} columns={columns} />
       </Box>
     </Box>
   );
