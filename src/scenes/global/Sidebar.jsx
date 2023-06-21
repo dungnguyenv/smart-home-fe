@@ -191,13 +191,13 @@ const Sidebar = ({ authentication }) => {
               setSelected={setSelected}
             />
 
-            {/* <Item
+            <Item
               title="Chatbot"
               to="/chatbot"
               icon={<SmartToyIcon />}
               selected={selected}
               setSelected={setSelected}
-            /> */}
+            />
 
             <Item
               title="Camera"

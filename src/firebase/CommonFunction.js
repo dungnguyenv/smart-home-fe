@@ -13,7 +13,7 @@ const formatDateToString = (date) => {
 }
 
 const formatFloat = (number) => {
-    if (!number) return "0.00%"
+    if (!number) return "0.00"
     // return number.toFixed(2);
     return Math.floor(number * 100) / 100;
 }

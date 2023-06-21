@@ -19,7 +19,8 @@ import { database, writeDataToPath, sendLog } from "../../firebase/FirebaseConfi
 import { getDatabase, ref, onValue } from "firebase/database";
 import { chatGPTRequest } from "../../openai/ChatGPT";
 import { getTimeOn, formatDateToString } from "../../firebase/CommonFunction";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Dashboard = ({ authentication }) => {
 
@@ -427,6 +428,7 @@ const Dashboard = ({ authentication }) => {
           </Box> */}
         </Box>
       </Box>
+      <ToastContainer />
     </div>
   );
 };

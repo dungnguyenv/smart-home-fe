@@ -1,0 +1,15 @@
+.father {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.first {
+    position: absolute;
+    z-index: 1;
+}
+
+.second {
+    position: absolute;
+    z-index: 2;
+}

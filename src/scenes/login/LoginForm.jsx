@@ -4,14 +4,14 @@ import Icon from "../../components/Icon";
 import Input from "../../components/Input";
 import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
 import { useState, useEffect } from "react";
-import { mockDataAccount } from "../../data/AccountDataMock";
 import { sendLog } from "../../firebase/FirebaseConfig";
 import { database } from "../../firebase/FirebaseConfig";
 import { getDatabase, ref, onValue } from "firebase/database";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import FaceId from "../dashboard/FaceId";
 
-const LoginForm = ({ authentication }) => {
+const LoginForm = ({ authentication, showFaceId }) => {
   const FacebookBackground =
     "linear-gradient(to right, #0546A0 0%, #0546A0 40%, #663FB6 100%)";
   const InstagramBackground =
@@ -22,6 +22,7 @@ const LoginForm = ({ authentication }) => {
     "username": "",
     "password": ""
   })
+  console.log('Aucthentication: ', authentication)
   const defaultToastStyle = {
     position: "top-right",
     autoClose: 5000,
@@ -38,6 +39,7 @@ const LoginForm = ({ authentication }) => {
       console.log("Data: " + JSON.stringify(snapshot.val()))
 
       setUsers(Object.values(snapshot.val()))
+      console.log("SET Data: " + users)
     }, {
       onlyOnce: false
     });
@@ -45,6 +47,7 @@ const LoginForm = ({ authentication }) => {
   return (
     <div>
       <MainContainer>
+        {showFaceId && <FaceId authentication={authentication} />}
         <WelcomeText>Welcome</WelcomeText>
         <InputContainer>
           <Input type="text" placeholder="Email" value={loginData.username} onChange={(event) => {
@@ -63,11 +66,11 @@ const LoginForm = ({ authentication }) => {
         <ButtonContainer>
           <Button content="Sign Up" onClick={() => {
             console.log("username: " + loginData.username + " password: " + loginData.password)
-            const account = users.find(data => data.username == loginData.username)
-            if (account == null) {
+            const account = users.find(data => data.username === loginData.username)
+            if (!account) {
               toast.error('Username or password is not correct!', defaultToastStyle);
             } else {
-              if (account.password == loginData.password) {
+              if (account.password === loginData.password) {
                 console.log("Login Successfully! ", account)
                 authentication.setIsAuthenticated(true)
                 authentication.setUser(account)

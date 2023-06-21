@@ -19,6 +19,9 @@ import BedRoom from "./scenes/dashboard/BedRoom";
 import LoginForm from "./scenes/login/LoginForm";
 import ChatBox from "./scenes/dashboard/ChatBox";
 import Camera from "./scenes/dashboard/Camera";
+import FaceId from "./scenes/dashboard/FaceId";
+
+
 const HomePage = ({ authentication }) => {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
@@ -38,7 +41,7 @@ const HomePage = ({ authentication }) => {
               <Routes>
                 <Route path="/" element={<Dashboard authentication={authentication} />} />
                 <Route path="/bedroom" element={<BedRoom />} />
-                {/* <Route path="/chatbot" element={<ChatBox />} /> */}
+                <Route path="/chatbot" element={<Form />} />
                 <Route path="/camera" element={<Camera />} />
                 <Route path="/team" element={<Team />} />
                 <Route path="/contacts" element={<Contacts />} />
