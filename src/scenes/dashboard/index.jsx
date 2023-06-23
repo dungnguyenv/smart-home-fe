@@ -77,7 +77,13 @@ const Dashboard = ({ authentication }) => {
         "statusName": snapshot.val()['curtains']['status'] == 1 ? "ON" : "OFF",
         "timeOn": getTimeOn(snapshot.val()['curtains']['time-on'])
       })
+    }, {
+      onlyOnce: false
+    });
 
+    onValue(ref(database, '/smart-home/living-room/sensors'), (snapshot) => {
+      console.log(snapshot.val())
+      // Convert the object to an array of objects
       setDht11(snapshot.val()["dht11"])
     }, {
       onlyOnce: false
