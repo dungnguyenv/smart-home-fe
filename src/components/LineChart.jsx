@@ -1,15 +1,97 @@
 import { ResponsiveLine } from "@nivo/line";
+import { useState, useEffect } from "react";
 import { useTheme } from "@mui/material";
 import { tokens } from "../theme";
-import { mockLineData as data } from "../data/mockData";
+import { mockLineData as data, mockLineData } from "../data/mockData";
+import { database } from "../firebase/FirebaseConfig";
+import { getDatabase, ref, onValue } from "firebase/database";
+
+var lineData = mockLineData;
 
 const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
+  const formatDateTime = (timestamp) => {
+    const date = new Date(timestamp);
+    const day = date.getDate()
+    const month = date.getMonth() + 1
+    return (day < 10 ? "0" + day : day)
+      + "/" + (month < 10 ? "0" + month : month);
+  }
+
+  useEffect(() => {
+    onValue(ref(database, '/smart-home/living-room/logs/dht11'), (snapshot) => {
+      console.log("Data: " + JSON.stringify(snapshot.val()))
+      const temperatureDataArray = Object.values(snapshot.val()["temperature"]);
+      const humidityDataArray = Object.values(snapshot.val()["humidity"]);
+
+      temperatureDataArray.sort((a, b) => b.time - a.time);
+      humidityDataArray.sort((a, b) => b.time - a.time);
+
+      var temp12LastestDays = []
+      let index = 0
+      for (let x = 0; x < 12; x++) {
+        let tempAverageDayData = {
+          x: formatDateTime(temperatureDataArray[index]['time']),
+          y: 0
+        }
+        let date = new Date(temperatureDataArray[index]['time']);
+        let list = []
+        while (index < temperatureDataArray.length) {
+          let date2 = new Date(temperatureDataArray[index]['time']);
+          if (date2.getMonth() === date.getMonth() && date2.getDate() === date.getDate()) {
+            list.push(temperatureDataArray[index]['value'])
+            index++;
+          } else {
+            break;
+          }
+        }
+        tempAverageDayData.y = list.reduce((a, b) => a + b, 0) / list.length;
+        temp12LastestDays.push(tempAverageDayData)
+        if (index > index < temperatureDataArray.length) {
+          break;
+        }
+      }
+      console.log("Temp: ", temp12LastestDays);
+
+
+      // var temp12LastestDays = temperatureDataArray.slice(0, 12).map(val => {
+      //   return {
+      //     x: formatDateTime(val['time']),
+      //     y: val['value']
+      //   }
+      // })
+      // // console.log("Temp: ", temp12LastestDays)
+      // var hum12LastestDays = humidityDataArray.slice(0, 12).map(val => {
+      //   return {
+      //     x: formatDateTime(val['time']),
+      //     y: val['value']
+      //   }
+      // })
+
+      // lineData = [
+      //   {
+      //     id: "Temperature",
+      //     color: tokens("dark").greenAccent[500],
+      //     data: temp12LastestDays
+      //   },
+      // {
+      //   id: "Humidity",
+      //   color: tokens("dark").blueAccent[300],
+      //   data: hum12LastestDays
+      // }
+      // ]
+
+      // console.log("Line Data: ", lineData);
+    }, {
+      onlyOnce: false
+    });
+  }, [])
+
   return (
     <ResponsiveLine
-      data={data}
+      data={lineData}
       theme={{
         axis: {
           domain: {

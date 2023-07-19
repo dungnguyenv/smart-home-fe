@@ -25,12 +25,13 @@ const database = getDatabase(app);
 
 
 function writeDataToPath(path, value) {
+    console.log("Write data: ", value)
     set(ref(database, path), value)
         .then(() => {
-            console.log("Write data successfully: ", value)
+            console.log("Write data successfully")
         })
         .catch((error) => {
-            console.log("Failed to write data: ", value)
+            console.log("Failed to write data")
         });
 }
 

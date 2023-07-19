@@ -73,16 +73,15 @@ const Dashboard = ({ authentication }) => {
       })
 
       setCurtains({
-        "status": snapshot.val()['curtains']['status'],
-        "statusName": snapshot.val()['curtains']['status'] == 1 ? "ON" : "OFF",
-        "timeOn": getTimeOn(snapshot.val()['curtains']['time-on'])
+        "status": snapshot.val()['curtain']['status'],
+        "statusName": snapshot.val()['curtain']['status'] == 1 ? "ON" : "OFF",
+        "timeOn": getTimeOn(snapshot.val()['curtain']['time-on'])
       })
     }, {
       onlyOnce: false
     });
 
     onValue(ref(database, '/smart-home/living-room/sensors'), (snapshot) => {
-      console.log(snapshot.val())
       // Convert the object to an array of objects
       setDht11(snapshot.val()["dht11"])
     }, {
@@ -90,13 +89,10 @@ const Dashboard = ({ authentication }) => {
     });
 
     onValue(ref(database, '/smart-home/logs'), (snapshot) => {
-      console.log(snapshot.val())
       // Convert the object to an array of objects
       const dataArray = Object.values(snapshot.val().content);
       // Sort the array in descending order based on the "time" property
       dataArray.sort((a, b) => b.time - a.time);
-
-      console.log(dataArray);
       setHistories(dataArray.slice(0, 100))
     }, {
       onlyOnce: false
@@ -159,8 +155,8 @@ const Dashboard = ({ authentication }) => {
               checked={smartTv.status}
               onClick={() => {
                 writeDataToPath("/smart-home/living-room/devices/tv", {
-                  "status": smartTv.status == 1 ? 0 : 1,
-                  "time-on": smartTv.status == 1 ? 0 : (new Date()).getTime()
+                  "status": smartTv['status'] == 1 ? 0 : 1,
+                  "time-on": smartTv['status'] == 1 ? 0 : (new Date()).getTime()
                 })
                 sendLog({
                   "action": smartTv.status == 1 ? "Turn off living room TV" : "Turn on living room TV",
@@ -252,7 +248,7 @@ const Dashboard = ({ authentication }) => {
             justifyContent="center"
           >
             <StatBox
-              title="Curtains"
+              title="Curtain"
               subtitle={"Status: " + curtains.statusName}
               progress={(curtains.status == 1 ? curtains.timeOn : 0)}
               increase={"Time: " + (curtains.status == 1 ? curtains.timeOn : 0) + "h"}
@@ -266,12 +262,12 @@ const Dashboard = ({ authentication }) => {
               checked={curtains.status}
 
               onClick={() => {
-                writeDataToPath("/smart-home/living-room/devices/curtains", {
+                writeDataToPath("/smart-home/living-room/devices/curtain", {
                   "status": curtains.status == 1 ? 0 : 1,
                   "time-on": curtains.status == 1 ? 0 : (new Date()).getTime()
                 })
                 sendLog({
-                  "action": curtains.status == 1 ? "Close living room curtains" : "Open living room curtains",
+                  "action": curtains.status == 1 ? "Close living room curtain" : "Open living room curtain",
                   "time": (new Date).getTime(),
                   "user-id": authentication.user.id,
                   "user-full-name": authentication.user["fullName"]
