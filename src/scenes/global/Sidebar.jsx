@@ -168,36 +168,36 @@ const Sidebar = ({ authentication }) => {
             />
 
             <Item
-              title="Kitchen"
-              to="/kitchen"
+              title="Other Device"
+              to="/other-device"
               icon={<KitchenRoundedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
 
-            <Item
+            {/* <Item
               title="Bath Room"
               to="/bathroom"
               icon={<BathtubRoundedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
 
-            <Item
+            {/* <Item
               title="Garden"
               to="/garden"
               icon={<YardRoundedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
 
-            <Item
+            {/* <Item
               title="Chatbot"
               to="/chatbot"
               icon={<SmartToyIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
 
             <Item
               title="Camera"

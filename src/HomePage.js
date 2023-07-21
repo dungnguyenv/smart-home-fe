@@ -20,7 +20,7 @@ import LoginForm from "./scenes/login/LoginForm";
 import ChatBox from "./scenes/dashboard/ChatBox";
 import Camera from "./scenes/dashboard/Camera";
 import FaceId from "./scenes/dashboard/FaceId";
-
+import OtherDevices from "./scenes/dashboard/OtherDevices";
 
 const HomePage = ({ authentication }) => {
   const [theme, colorMode] = useMode();
@@ -43,6 +43,7 @@ const HomePage = ({ authentication }) => {
                 <Route path="/bedroom" element={<BedRoom />} />
                 <Route path="/chatbot" element={<Form />} />
                 <Route path="/camera" element={<Camera />} />
+                <Route path="/other-device" element={<OtherDevices />} />
                 <Route path="/team" element={<Team />} />
                 <Route path="/contacts" element={<Contacts />} />
                 <Route path="/form" element={<Form />} />

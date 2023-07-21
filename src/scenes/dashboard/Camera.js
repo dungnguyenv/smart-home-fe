@@ -198,7 +198,7 @@ export default function SplitButton() {
                 </div>
             </div>
             <div>
-                <ImageList sx={{ width: "370px", height: 625, marginLeft: "60%", marginTop: "10px", borderRadius: "10px" }} cols={1}>
+                <ImageList sx={{ width: "370px", height: 625, marginLeft: "20%", marginTop: "10px", borderRadius: "10px" }} cols={1}>
                     <ImageListItem key="Subheader" cols={1}>
                         <ListSubheader component="div">Face Recognition</ListSubheader>
                     </ImageListItem>
